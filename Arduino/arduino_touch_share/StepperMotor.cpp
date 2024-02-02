@@ -1,12 +1,12 @@
 #include "Arduino.h"
 #include "StepperMotor.hpp"
 
-StepperMotor::StepperMotor(int pin1, int pin2, int pin3, int pin4, int delay) {
+StepperMotor::StepperMotor(int pin1, int pin2, int pin3, int pin4, int step_delay) {
 	pinMode(pin1, OUTPUT);
 	pinMode(pin2, OUTPUT);
 	pinMode(pin3, OUTPUT);
 	pinMode(pin4, OUTPUT);
-	this->delay = delay;
+	this->step_delay = step_delay;
 	this->dir = true;
 };
 
@@ -15,7 +15,6 @@ StepperMotor::StepperMotor(int pin1, int pin2, int pin3, int pin4, int delay) {
 void StepperMotor::step(int steps) {
   int steps_abs = abs(steps);
   int count_step = 0;
-	this->dir = (steps > 0)? true:false;
 	this->dir = (steps > 0);
   do {
     int step_num = count_step % 4;
@@ -76,7 +75,10 @@ void StepperMotor::step(int steps) {
         break;
       } 
     };
-    //delay(this->delay);
+    Serial.println(count_step);
+    Serial.println(step_num);
+    Serial.println(this->step_delay);
+    delay(this->step_delay);
     count_step++;
   } while (count_step < steps_abs);
 }
