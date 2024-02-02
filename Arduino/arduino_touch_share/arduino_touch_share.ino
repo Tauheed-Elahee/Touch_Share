@@ -26,6 +26,9 @@ void loop() {
   MotorSteps(1000);
   MotorSteps(-1000);
 
+  //stepperMotor.step(1000);
+  //stepperMotor.step(-1000);
+
 }
 
 
