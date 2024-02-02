@@ -16,8 +16,9 @@ void StepperMotor::step(int steps) {
   int steps_abs = abs(steps);
   int count_step = 0;
 	this->dir = (steps > 0)? true:false;
+	this->dir = (steps > 0);
   do {
-    int step_num = count_step%4;
+    int step_num = count_step % 4;
     if(this->dir){
     switch(step_num){
       case 0:
