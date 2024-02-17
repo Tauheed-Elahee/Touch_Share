@@ -19,15 +19,17 @@ int step_number = 0;
 StepperMotor stepperMotor(STEPPER_PIN_1, STEPPER_PIN_2, STEPPER_PIN_3, STEPPER_PIN_4, MIN_TIME_ENTRE_PAS);
 
 void setup() {
+  Serial.begin(115200);
+  stepperMotor.Print();
 }
 
 void loop() {
 
-  MotorSteps(1000);
-  MotorSteps(-1000);
+  //MotorSteps(1000);
+  //MotorSteps(-1000);
 
-  //stepperMotor.step(1000);
-  //stepperMotor.step(-1000);
+  stepperMotor.step(1000);
+  stepperMotor.step(-1000);
 
 }
 
