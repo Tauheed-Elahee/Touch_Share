@@ -6,11 +6,16 @@
 class StepperMotor
 {
 private:
+  // Pin assignment
 	int pin1;
 	int pin2;
 	int pin3;
 	int pin4;
+
+  // step delay
 	int step_delay;
+
+  // direction TODO: to be removed
 	bool dir;
 public:
 	StepperMotor(int pin1, int pin2, int pin3, int pin4, int step_delay);
