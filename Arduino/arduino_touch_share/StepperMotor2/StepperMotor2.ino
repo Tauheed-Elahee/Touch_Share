@@ -10,6 +10,10 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   //Serial.println("Hello World!");
+  motorSetup();
+}
+
+void motorSetup(void) {
   digitalWrite(12, LOW);
   delay(delayShift);
   digitalWrite(13, HIGH);
