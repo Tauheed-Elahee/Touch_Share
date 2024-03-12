@@ -31,3 +31,23 @@ void loop() {
   digitalWrite(12, HIGH);
   delay(delayShift);
 }
+
+void motorStep(void) {
+  digitalWrite(12, LOW);
+  delay(delayShift);
+  digitalWrite(12, HIGH);
+  delay(delayShift);
+  digitalWrite(12, LOW);
+  delay(delayShift);
+  digitalWrite(12, HIGH);
+  delay(delayShift);
+  digitalWrite(12, LOW);
+  delay(delayShift);
+  digitalWrite(12, HIGH);
+  delay(delayShift);
+  digitalWrite(12, LOW);
+  delay(delayShift);
+  digitalWrite(12, HIGH);
+  delay(delayShift);
+  digitalWrite(12, LOW);
+}
