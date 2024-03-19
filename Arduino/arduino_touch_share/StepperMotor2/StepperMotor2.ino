@@ -1,6 +1,6 @@
 #include "pinmap.h"
 
-uint32_t delayShift = 10;
+uint32_t delayShift = 1;
 
 bool change = false;
 
@@ -11,6 +11,10 @@ void setup() {
   pinMode(SCL, OUTPUT);
   pinMode(DIR, OUTPUT);
   digitalWrite(DIR, LOW);
+
+  // Setup shift register
+  motorSetup();
+  pinMode(SDA, INPUT);
 
   // Enable pins
   pinMode(EN1, OUTPUT);
@@ -32,7 +36,7 @@ void loop() {
 void motorStep(void) {
   int count = 0;
   do {
-    motorSetup();
+    motorStepSingle();
     count ++;
   } while (count < 100);
 }
