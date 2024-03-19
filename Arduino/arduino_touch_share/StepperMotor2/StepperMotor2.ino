@@ -64,6 +64,7 @@ void motorSetup(void) {
   delay(delayShift);
 }
 
+// Single cycle of the shift register
 void motorStepSingle(void) {
   digitalWrite(SCL, LOW);
   delay(delayShift);
