@@ -18,7 +18,6 @@ void setup() {
 
   // Enable pins
   pinMode(EN1, OUTPUT);
-  digitalWrite(EN1, HIGH);
 
   analogWrite(SCL, 127);
 }
@@ -27,12 +26,16 @@ void loop() {
   // put your main code here, to run repeatedly:
   //Serial.println("Hello World!");
   //motorStep();
-  delay(1000);
 
   change = !change;
 
   if (change) digitalWrite(DIR, HIGH);
   if (!change) digitalWrite(DIR, LOW);
+
+  digitalWrite(EN1, HIGH);
+  delay(1000);
+  digitalWrite(EN1, LOW);
+  delay(1000);
 }
 
 void motorStep(void) {
