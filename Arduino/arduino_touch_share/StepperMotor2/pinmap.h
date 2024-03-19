@@ -1,9 +1,9 @@
 #ifndef PINMAP_H
 #define PINMAP_H
 
-#define SDA 13
-#define SCL 12
-#define DIR 11
+#define SDA 11
+#define SCL 10
+#define DIR 9
 
 #define EN1 2
 #define EN2 3
