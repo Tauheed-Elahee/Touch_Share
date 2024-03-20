@@ -10,10 +10,10 @@
 #define EN3 4
 #define EN4 5
 
-#define VAL1 "A1"
-#define VAL2 "A2"
-#define VAL3 "A3"
-#define VAL4 "A4"
+#define VAL1 1
+#define VAL2 2
+#define VAL3 3
+#define VAL4 4
 
 #define NUM_VALUES 4
 
