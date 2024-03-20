@@ -15,4 +15,6 @@
 #define VAL3 "A3"
 #define VAL4 "A4"
 
+#define NUM_VALUES 4
+
 #endif // PINMAP_H
