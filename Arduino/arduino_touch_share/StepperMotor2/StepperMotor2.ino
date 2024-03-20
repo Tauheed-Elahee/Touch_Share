@@ -27,27 +27,38 @@ void setup() {
 
   // Enable pins
   pinMode(EN1, OUTPUT);
+  pinMode(VAL1, INPUT);
 
   analogWrite(SCL, 127);
 }
+
+int valread = 0;
+int valtarget = 0;
+bool valchange = false;
 
 void loop() {
   // put your main code here, to run repeatedly:
   //Serial.println("Hello World!");
   //motorStep();
   
-  /*
-  change = !change;
+  //change = !change;
+
+  change = true;
 
   if (change) digitalWrite(DIR, HIGH);
   if (!change) digitalWrite(DIR, LOW);
 
-  digitalWrite(EN1, HIGH);
-  delay(1000);
-  digitalWrite(EN1, LOW);
-  delay(1000);
-  */
+  if (Serial.available() > 0) valchange = true;
 
+  if (valchange) {
+    valread = analogRead(VAL1);
+    valtarget = Serial.parseInt();
+    pinMove(1, valtarget);
+    valchange = false;
+  }
+  delay(100);
+  
+  /*
   // Call the readValues function
   readValues(values, valuesChanged);
 
@@ -56,6 +67,7 @@ void loop() {
   }
 
   valuesChanged = false;
+  */
 }
 
 void motorSetup(void) {
@@ -114,4 +126,18 @@ void motorTransmit(int (&valArray) [NUM_VALUES]) {
   }
 
   Serial.println();
+}
+
+
+void pinMove(int pinNum, int valNew) {
+  int valOld = analogRead(VAL1);
+  if ((valNew - valOld) > 30) digitalWrite(DIR, HIGH);
+  if ((valNew - valOld) < 30) digitalWrite(DIR, LOW);
+  do {
+    digitalWrite(EN1, HIGH);
+    delay(100);
+    digitalWrite(EN1, LOW);
+    delay(500);
+    valread = analogRead(VAL1);
+  } while (abs(valNew - valOld) > 30);
 }
