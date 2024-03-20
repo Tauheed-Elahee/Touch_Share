@@ -38,14 +38,6 @@ void loop() {
   delay(1000);
 }
 
-void motorStep(void) {
-  int count = 0;
-  do {
-    motorStepSingle();
-    count ++;
-  } while (count < 100);
-}
-
 void motorSetup(void) {
   digitalWrite(SCL, LOW);
   delay(delayShift);
@@ -67,25 +59,4 @@ void motorSetup(void) {
   delay(delayShift);
   digitalWrite(SCL, HIGH);
   delay(delayShift);
-}
-
-// Single cycle of the shift register
-void motorStepSingle(void) {
-  digitalWrite(SCL, LOW);
-  delay(delayShift);
-  digitalWrite(SCL, HIGH);
-  delay(delayShift);
-  digitalWrite(SCL, LOW);
-  delay(delayShift);
-  digitalWrite(SCL, HIGH);
-  delay(delayShift);
-  digitalWrite(SCL, LOW);
-  delay(delayShift);
-  digitalWrite(SCL, HIGH);
-  delay(delayShift);
-  digitalWrite(SCL, LOW);
-  delay(delayShift);
-  digitalWrite(SCL, HIGH);
-  delay(delayShift);
-  digitalWrite(SCL, LOW);
 }
