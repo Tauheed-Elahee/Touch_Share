@@ -138,6 +138,6 @@ void pinMove(int pinNum, int valNew) {
     delay(100);
     digitalWrite(EN1, LOW);
     delay(500);
-    valread = analogRead(VAL1);
+    valOld = analogRead(VAL1);
   } while (abs(valNew - valOld) > 30);
 }
