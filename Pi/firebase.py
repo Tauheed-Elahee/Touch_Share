@@ -26,7 +26,7 @@ username = "arsalan"
 # recieved data settings
 rec_data = [[0,0], [0,0]]
 COM_PORT = "/dev/ttyACM0"
-BAUD_RATE = 9600
+BAUD_RATE = 115200
 
 # start the serial port 
 ser = serial.Serial(COM_PORT, BAUD_RATE)
@@ -56,12 +56,17 @@ while(True):
             # send the data out of the serial port 
             ser.write(all_data.encode())
 
-            print("sent: {}".format(all_data))
+            print("{}".format(all_data))
 
             last_msg_to_arduino = all_data
 
         else:
             print("nothing new to send")
+        
+        line = ser.readline().decode().strip()
+        
+        if line:
+            print(line)
 
 
     ## ================== ##
