@@ -37,22 +37,23 @@ int valtarget = 0;
 bool valchange = false;
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  //Serial.println("Hello World!");
-  //motorStep();
-  
-  //change = !change;
 
-  change = true;
-
-  if (change) digitalWrite(DIR, HIGH);
-  if (!change) digitalWrite(DIR, LOW);
+  valread = analogRead(VAL1);
+  Serial.print("Current: ");
+  Serial.println(valread);
 
   if (Serial.available() > 0) valchange = true;
 
+  Serial.print("valhange: ");
+  Serial.println(valchange);
+
   if (valchange) {
+    Serial.println("Changed!");
     valread = analogRead(VAL1);
     valtarget = Serial.parseInt();
+    Serial.print("Target: ");
+    Serial.println(valtarget);
+    delay(2000);
     pinMove(1, valtarget);
     valchange = false;
   }
@@ -130,14 +131,19 @@ void motorTransmit(int (&valArray) [NUM_VALUES]) {
 
 
 void pinMove(int pinNum, int valNew) {
+  Serial.println("Here!");
   int valOld = analogRead(VAL1);
   if ((valNew - valOld) > 30) digitalWrite(DIR, HIGH);
   if ((valNew - valOld) < 30) digitalWrite(DIR, LOW);
+  
   do {
     digitalWrite(EN1, HIGH);
     delay(100);
     digitalWrite(EN1, LOW);
     delay(500);
     valOld = analogRead(VAL1);
+    Serial.print("Current moving value: ");
+    Serial.println(valOld);
   } while (abs(valNew - valOld) > 30);
+  Serial.println("FINISHED!");
 }
