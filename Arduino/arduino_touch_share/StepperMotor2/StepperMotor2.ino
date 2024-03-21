@@ -7,10 +7,7 @@
 // Global Variables
 uint32_t delayShift = 1;
 bool change = false;
-
 int values[NUM_VALUES];     // Array to store the parsed integers
-byte valueIndex = 0;        // Index to keep track of the current position in the array
-boolean valuesChanged = false; // Flag to indicate if values array has changed
 
 
 void setup() {
@@ -30,6 +27,9 @@ void setup() {
   pinMode(VAL1, INPUT);
 
   analogWrite(SCL, 127);
+
+  // Take initial reading of pins
+  motorTransmit(values);
 }
 
 int valread = 0;
@@ -66,6 +66,8 @@ void loop() {
   delay(100);
   */
 
+  String pinReading = motorTransmit(values);
+  Serial.println(pinReading);
   
   // Call the readValues function
   if (Serial.available() > 0) valchange = true;
@@ -74,10 +76,12 @@ void loop() {
     String valString = Serial.readString();
     valString += '\n';
     readValues(values, valString);
-    motorReceive(values);
+    motorReceivePrint(values);
     valchange = false;
   }
   
+  // Polling frequency
+  delay(500);
 }
 
 void motorSetup(void) {
@@ -121,12 +125,30 @@ void readValues(int (&values)[NUM_VALUES], String valString) {
   values[3] = val4[0];
 }
 
-void motorReceive(int (&values) [NUM_VALUES]) {
+void motorReceivePrint(int (&values) [NUM_VALUES]) {
   for (int i=0; i<NUM_VALUES; i++) {
     Serial.println(values[i]);
   }
 
   Serial.println();
+}
+
+void motorReceive(int (&values) [NUM_VALUES]) {
+  for (int i=0; i<NUM_VALUES; i++) {
+    pinMove(i+1,values[i]);
+  }
+}
+
+String motorTransmit(int (&values) [NUM_VALUES]) {
+  String str = "";
+  for (int i=0; i<NUM_VALUES; i++) {
+    values[i] = pinRead(i+1);
+    str += values[i];
+    str += ',';
+  }
+  str.remove(str.length() - 1);
+
+  return str;
 }
 
 
