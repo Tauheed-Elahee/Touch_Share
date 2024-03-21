@@ -66,7 +66,8 @@ void loop() {
   delay(100);
   */
 
-  String pinReading = motorTransmit(values);
+  //String pinReading = motorTransmit(values);
+  String pinReading = valuesPrint(values);
   Serial.println(pinReading);
   
   // Call the readValues function
@@ -81,7 +82,7 @@ void loop() {
   }
   
   // Polling frequency
-  delay(500);
+  delay(100);
 }
 
 void motorSetup(void) {
@@ -126,17 +127,31 @@ void readValues(int (&values)[NUM_VALUES], String valString) {
 }
 
 void motorReceivePrint(int (&values) [NUM_VALUES]) {
+  String str = "Received: ";
   for (int i=0; i<NUM_VALUES; i++) {
-    Serial.println(values[i]);
+    str += values[i];
+    str += ',';
   }
+  str.remove(str.length() - 1);
 
-  Serial.println();
+  Serial.println(str);
 }
 
 void motorReceive(int (&values) [NUM_VALUES]) {
   for (int i=0; i<NUM_VALUES; i++) {
     pinMove(i+1,values[i]);
   }
+}
+
+String valuesPrint(int (&values) [NUM_VALUES]) {
+  String str = "";
+  for (int i=0; i<NUM_VALUES; i++) {
+    str += values[i];
+    str += ',';
+  }
+  str.remove(str.length() - 1);
+
+  return str;
 }
 
 String motorTransmit(int (&values) [NUM_VALUES]) {
