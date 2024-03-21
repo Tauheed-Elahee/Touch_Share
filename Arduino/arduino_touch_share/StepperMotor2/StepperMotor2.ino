@@ -42,9 +42,12 @@ void loop() {
   Serial.print("Current: ");
   Serial.println(valread);
 
+  Serial.print("valchange: ");
+  Serial.println(valchange);
+
   if (Serial.available() > 0) valchange = true;
 
-  Serial.print("valhange: ");
+  Serial.print("check valchange: ");
   Serial.println(valchange);
 
   if (valchange) {
@@ -133,10 +136,10 @@ void motorTransmit(int (&valArray) [NUM_VALUES]) {
 void pinMove(int pinNum, int valNew) {
   Serial.println("Here!");
   int valOld = analogRead(VAL1);
-  if ((valNew - valOld) > 30) digitalWrite(DIR, HIGH);
-  if ((valNew - valOld) < 30) digitalWrite(DIR, LOW);
   
   do {
+    if ((valNew - valOld) > 30) digitalWrite(DIR, HIGH);
+    if ((valNew - valOld) < 30) digitalWrite(DIR, LOW);
     digitalWrite(EN1, HIGH);
     delay(100);
     digitalWrite(EN1, LOW);
