@@ -39,24 +39,24 @@ bool valchange = false;
 void loop() {
 
   valread = analogRead(VAL1);
-  Serial.print("Current: ");
+  //Serial.print("Current: ");
   Serial.println(valread);
 
-  Serial.print("valchange: ");
-  Serial.println(valchange);
+  //Serial.print("valchange: ");
+  //Serial.println(valchange);
 
   if (Serial.available() > 0) valchange = true;
 
-  Serial.print("check valchange: ");
-  Serial.println(valchange);
+  //Serial.print("check valchange: ");
+  //Serial.println(valchange);
 
   if (valchange) {
-    Serial.println("Changed!");
+    //Serial.println("Changed!");
     valread = analogRead(VAL1);
     valtarget = Serial.parseInt();
-    Serial.print("Target: ");
-    Serial.println(valtarget);
-    delay(2000);
+    //Serial.print("Target: ");
+    //Serial.println(valtarget);
+    delay(1000);
     pinMove(1, valtarget);
     valchange = false;
   }
@@ -134,7 +134,7 @@ void motorTransmit(int (&valArray) [NUM_VALUES]) {
 
 
 void pinMove(int pinNum, int valNew) {
-  Serial.println("Here!");
+  //Serial.println("Here!");
   int valOld = analogRead(VAL1);
   
   do {
@@ -145,8 +145,8 @@ void pinMove(int pinNum, int valNew) {
     digitalWrite(EN1, LOW);
     delay(500);
     valOld = analogRead(VAL1);
-    Serial.print("Current moving value: ");
-    Serial.println(valOld);
+    //Serial.print("Current moving value: ");
+    //Serial.println(valOld);
   } while (abs(valNew - valOld) > 30);
-  Serial.println("FINISHED!");
+  //Serial.println("FINISHED!");
 }
