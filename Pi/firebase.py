@@ -6,7 +6,7 @@ import datetime
 import random
 import serial 
 
-mode = "r" # can be receive(r) or transmit ('t')
+mode = "t" # can be receive(r) or transmit ('t')
 
 # Config will contain the information needed to connect to the firebase
 
@@ -102,31 +102,35 @@ while(True):
 
     elif(mode == 't'):
         
-        # flush the input buffer
-        #arduino.reset_input_buffer()
+        
 
         # Read a line of text from the serial port
         line = arduino.readline()
 
-        try:
+        if line:
 
-            # Check if the line is not empty
-            if line:
+            line = line.decode().strip()
 
-                line = line.decode().strip()
+            print("Received:", line)  # Print the received line
 
-                print("Received:", line)  # Print the received line
+            # get time stamp
+            ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-                # get time stamp
-                ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            # upload to firebase 
+            db.child(dataset).child(key).set(line) 
 
-                # upload to firebase 
-                db.child(dataset).child(key).set(line) 
+            key = key + 1
 
-                key = key + 1
+        # flush the input buffer
+        arduino.reset_input_buffer()
+
+        # try:
+
+        #     # Check if the line is not empty
+            
 
                 
-        except UnicodeDecodeError:
-            print("error decoding input. Skipping")
+        # except UnicodeDecodeError:
+        #     print("error decoding input. Skipping")
             
 
