@@ -38,6 +38,7 @@ bool valchange = false;
 
 void loop() {
 
+  /*
   valread = pinRead(1);
   //Serial.print("Current: ");
   Serial.println(valread);
@@ -63,17 +64,20 @@ void loop() {
     valchange = false;
   }
   delay(100);
-  
-  /*
-  // Call the readValues function
-  readValues(values, valuesChanged);
-
-  if (valuesChanged) {
-    motorTransmit(values);
-  }
-
-  valuesChanged = false;
   */
+
+  
+  // Call the readValues function
+  if (Serial.available() > 0) valchange = true;
+
+  if (valchange) {
+    String valString = Serial.readString();
+    valString += '\n';
+    readValues(values, valString);
+    motorTransmit(values);
+    valchange = false;
+  }
+  
 }
 
 void motorSetup(void) {
@@ -99,34 +103,25 @@ void motorSetup(void) {
   delay(delayShift);
 }
 
-void readValues(int (&valArray)[NUM_VALUES], bool &valChange) {
+void readValues(int (&values)[NUM_VALUES], String valString) {
   int tempVals[4];
-  if (Serial.available() > 0) {
-    String valString = Serial.readString();
     
-    char *val_str = valString.c_str();
-    CSV_Parser cp(val_str, /*format*/ "udududud", /*has_header*/ false);
-    cp << valString;
+  char *val_str = valString.c_str();
+  CSV_Parser cp(val_str, /*format*/ "udududud", /*has_header*/ false);
+  cp << valString;
     
-    uint16_t * val1 = (uint16_t*)cp[0];
-    uint16_t * val2 = (uint16_t*)cp[1];
-    uint16_t * val3 = (uint16_t*)cp[2];
-    uint16_t * val4 = (uint16_t*)cp[3];
+  uint16_t * val1 = (uint16_t*)cp[0];
+  uint16_t * val2 = (uint16_t*)cp[1];
+  uint16_t * val3 = (uint16_t*)cp[2];
+  uint16_t * val4 = (uint16_t*)cp[3];
 
-    int valNew[NUM_VALUES];
-    valNew[0] = val1[0];
-    valNew[1] = val2[0];
-    valNew[2] = val3[0];
-    valNew[3] = val4[0];
-
-    for (int i=0; i<NUM_VALUES; i++) {
-      if (valNew[i] != valArray[i]) valChange = true;
-      valArray[i] = valNew[i];
-    }
-  }
+  values[0] = val1[0];
+  values[1] = val2[0];
+  values[2] = val3[0];
+  values[3] = val4[0];
 }
 
-void motorTransmit(int (&valArray) [NUM_VALUES]) {
+void motorTransmit(int (&values) [NUM_VALUES]) {
   for (int i=0; i<NUM_VALUES; i++) {
     Serial.println(values[i]);
   }
