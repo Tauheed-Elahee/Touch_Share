@@ -50,6 +50,8 @@ void loop() {
   //Serial.print("check valchange: ");
   //Serial.println(valchange);
 
+  //Serial.println(Serial.readString())
+
   if (valchange) {
     //Serial.println("Changed!");
     valread = analogRead(VAL1);
@@ -137,7 +139,7 @@ void pinMove(int pinNum, int valNew) {
   //Serial.println("Here!");
   int valOld = analogRead(VAL1);
   
-  do {
+  while(abs(valNew - valOld) > 30) {
     //Serial.println("Loop!");
     if ((valNew - valOld) > 30) digitalWrite(DIR, HIGH);
     if ((valNew - valOld) < 30) digitalWrite(DIR, LOW);
@@ -148,6 +150,5 @@ void pinMove(int pinNum, int valNew) {
     valOld = analogRead(VAL1);
     //Serial.print("Current moving value: ");
     //Serial.println(valOld);
-  } while (abs(valNew - valOld) > 30);
-  //Serial.println("FINISHED!");
+  }
 }
