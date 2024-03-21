@@ -45,15 +45,11 @@ while(True):
     if(mode == 'r'):
         # get the data from firebase 
         mySensorData = db.child(dataset).get() 
-
-        # convert data into a dictionary 
-        mySensorData_dict = mySensorData.val() 
-
-        # get time that the sensor data was taken 
-        time_stamp = list(mySensorData_dict.keys())[-1]
+        
+        all_data = mySensorData[-1].key(), mySensorData[-1].val()
 
         # get the most recent data for the nodes
-        all_data = mySensorData_dict[time_stamp]
+        all_data = mySensorData_dict[1]
 
         if(last_msg_to_arduino != all_data):
             # send the data out of the serial port 
