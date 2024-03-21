@@ -152,3 +152,29 @@ void pinMove(int pinNum, int valNew) {
     //Serial.println(valOld);
   }
 }
+
+void pinEN(uint8_t pinNum, uint8_t pinState) {
+  switch(pinNum) {
+    case 1:
+      digitalWrite(EN1, pinState);
+    case 2:
+      digitalWrite(EN2, pinState);
+    case 3:
+      digitalWrite(EN3, pinState);
+    case 4:
+      digitalWrite(EN4, pinState);
+  }
+}
+
+int pinRead(uint8_t pinNum) {
+  switch(pinNum) {
+    case 1:
+      return analogRead(VAL1);
+    case 2:
+      return analogRead(VAL2);
+    case 3:
+      return analogRead(VAL3);
+    case 4:
+      return analogRead(VAL4);
+  }
+}
