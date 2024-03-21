@@ -38,7 +38,7 @@ bool valchange = false;
 
 void loop() {
 
-  valread = analogRead(VAL1);
+  valread = pinRead(1);
   //Serial.print("Current: ");
   Serial.println(valread);
 
@@ -54,7 +54,7 @@ void loop() {
 
   if (valchange) {
     //Serial.println("Changed!");
-    valread = analogRead(VAL1);
+    valread = pinRead(1);
     valtarget = Serial.parseInt();
     //Serial.print("Target: ");
     //Serial.println(valtarget);
@@ -137,15 +137,15 @@ void motorTransmit(int (&valArray) [NUM_VALUES]) {
 
 void pinMove(int pinNum, int valNew) {
   //Serial.println("Here!");
-  int valOld = analogRead(VAL1);
+  int valOld = pinRead(pinNum);
   
   while(abs(valNew - valOld) > 30) {
     //Serial.println("Loop!");
     if ((valNew - valOld) > 30) digitalWrite(DIR, HIGH);
     if ((valNew - valOld) < 30) digitalWrite(DIR, LOW);
-    digitalWrite(EN1, HIGH);
+    pinEN(pinNum, HIGH);
     delay(100);
-    digitalWrite(EN1, LOW);
+    pinEN(pinNum, LOW);
     delay(500);
     valOld = analogRead(VAL1);
     //Serial.print("Current moving value: ");
