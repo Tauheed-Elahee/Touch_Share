@@ -57,11 +57,8 @@ while(True):
 
         if(last_msg_to_arduino != all_data):
             # send the data out of the serial port 
-<<<<<<< HEAD
+            
             arduino.write(all_data.encode())
-=======
-            ser.write(bytes("500", 'utf-8'))
->>>>>>> 87c56ef (Change encoding python code)
 
             print("data sent to arduino: {}".format(all_data))
 
