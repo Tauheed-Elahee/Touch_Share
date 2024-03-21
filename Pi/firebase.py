@@ -6,7 +6,7 @@ import datetime
 import random
 import serial 
 
-mode = "r" # can be receive(r) or transmit ('t')
+mode = "t" # can be receive(r) or transmit ('t')
 
 # Config will contain the information needed to connect to the firebase
 
@@ -26,14 +26,17 @@ username = "arsalan"
 # recieved data settings
 rec_data = [[0,0], [0,0]]
 COM_PORT = "/dev/ttyACM0"
-BAUD_RATE = 115200
+BAUD_RATE = 9600
 
 # start the serial port 
-ser = serial.Serial(COM_PORT, BAUD_RATE)
+arduino = serial.Serial(COM_PORT, BAUD_RATE)
 
 
 # message to be sent to the arduino
 last_msg_to_arduino = ""
+
+# for for indexing firebase
+key = 0
 
 while(True):
     
@@ -54,19 +57,16 @@ while(True):
 
         if(last_msg_to_arduino != all_data):
             # send the data out of the serial port 
-            ser.write(all_data.encode())
+            arduino.write(all_data.encode())
 
-            print("{}".format(all_data))
+            print("data sent to arduino: {}".format(all_data))
 
             last_msg_to_arduino = all_data
 
         else:
             print("nothing new to send")
         
-        line = ser.readline().decode().strip()
-        
-        if line:
-            print(line)
+
 
 
     ## ================== ##
@@ -75,18 +75,32 @@ while(True):
 
     elif(mode == 't'):
         
+        # flush the input buffer
+        #arduino.reset_input_buffer()
+
         # Read a line of text from the serial port
-        line = "1,2,3,4"#= ser.readline().decode().strip()
+        line = arduino.readline()
+
+        try:
+
+            # Check if the line is not empty
+            if line:
+
+                line = line.decode().strip()
+
+                print("Received:", line)  # Print the received line
+
+                # get time stamp
+                ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+                # upload to firebase 
+                db.child(dataset).child(key).set(line) 
+
+                key = key + 1
+
+                
+        except UnicodeDecodeError:
+            print("error decoding input. Skipping")
+            
         
-        # Check if the line is not empty
-        if line:
-            print("Received:", line)  # Print the received line
 
-        # get time stamp
-        ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        # upload to firebase 
-        db.child(dataset).child(ts).set(line) 
-
-    # wait one second 
-    time.sleep(1)
