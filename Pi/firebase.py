@@ -26,7 +26,7 @@ username = "arsalan"
 # recieved data settings
 rec_data = [[0,0], [0,0]]
 COM_PORT = "/dev/ttyACM0"
-BAUD_RATE = 9600
+BAUD_RATE = 115200
 
 # start the serial port 
 arduino = serial.Serial(COM_PORT, BAUD_RATE)
@@ -38,9 +38,34 @@ last_msg_to_arduino = ""
 # for for indexing firebase
 key = 0
 
+
+
+
+### Functions
+        
+def arduinoRead():
+    # Read a line of text from the serial port
+    line = arduino.readline()
+
+    try:
+
+        # Check if the line is not empty
+        if line:
+        
+            line = line.decode().strip()
+        
+            print("Received:", line)  # Print the received line
+
+                
+    except UnicodeDecodeError:
+        print("error decoding input. Skipping")
+
+### Main funciton
+
+
 while(True):
     
-    
+    arduino.reset_input_buffer()
     
     if(mode == 'r'):
         # get the data from firebase 
@@ -50,19 +75,23 @@ while(True):
 
         # get the most recent data for the nodes
         all_data = all_data[1]
-
+        print("Current db value: {}".format(all_data))
 
         if(last_msg_to_arduino != all_data):
             # send the data out of the serial port 
+            time.sleep(5)
             
-            arduino.write(all_data.encode())
+            arduino.write(all_data.encode('utf-8'))
 
             print("data sent to arduino: {}".format(all_data))
 
             last_msg_to_arduino = all_data
 
         else:
-            print("nothing new to send")
+
+            arduinoRead()
+        
+        
         
 
 
@@ -100,5 +129,4 @@ while(True):
         except UnicodeDecodeError:
             print("error decoding input. Skipping")
             
-        
 
