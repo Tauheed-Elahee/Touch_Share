@@ -138,6 +138,7 @@ void pinMove(int pinNum, int valNew) {
   int valOld = analogRead(VAL1);
   
   do {
+    //Serial.println("Loop!");
     if ((valNew - valOld) > 30) digitalWrite(DIR, HIGH);
     if ((valNew - valOld) < 30) digitalWrite(DIR, LOW);
     digitalWrite(EN1, HIGH);
