@@ -6,7 +6,7 @@ import datetime
 import random
 import serial 
 
-mode = "t" # can be receive(r) or transmit ('t')
+mode = "r" # can be receive(r) or transmit ('t')
 
 # Config will contain the information needed to connect to the firebase
 
@@ -49,7 +49,8 @@ while(True):
         all_data = mySensorData[-1].key(), mySensorData[-1].val()
 
         # get the most recent data for the nodes
-        all_data = mySensorData_dict[1]
+        all_data = all_data[1]
+
 
         if(last_msg_to_arduino != all_data):
             # send the data out of the serial port 
