@@ -74,7 +74,7 @@ void loop() {
     String valString = Serial.readString();
     valString += '\n';
     readValues(values, valString);
-    motorTransmit(values);
+    motorReceive(values);
     valchange = false;
   }
   
@@ -121,7 +121,7 @@ void readValues(int (&values)[NUM_VALUES], String valString) {
   values[3] = val4[0];
 }
 
-void motorTransmit(int (&values) [NUM_VALUES]) {
+void motorReceive(int (&values) [NUM_VALUES]) {
   for (int i=0; i<NUM_VALUES; i++) {
     Serial.println(values[i]);
   }
