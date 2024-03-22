@@ -6,7 +6,7 @@ import datetime
 import random
 import serial 
 
-mode = "t" # can be receive(r) or transmit ('t')
+mode = "r" # can be receive(r) or transmit ('t')
 
 # Config will contain the information needed to connect to the firebase
 
@@ -47,18 +47,12 @@ def arduinoRead():
     # Read a line of text from the serial port
     line = arduino.readline()
 
-    try:
-
-        # Check if the line is not empty
-        if line:
-        
-            line = line.decode().strip()
-        
-            print("Received:", line)  # Print the received line
-
-                
-    except UnicodeDecodeError:
-        print("error decoding input. Skipping")
+    # Check if the line is not empty
+    if line:
+    
+        line = line.decode().strip()
+    
+        print("Arduino:", line)  # Print the received line
 
 ### Main funciton
 
@@ -66,6 +60,7 @@ def arduinoRead():
 while(True):
     
     arduino.reset_input_buffer()
+    arduino.reset_output_buffer()
     
     if(mode == 'r'):
         # get the data from firebase 
@@ -111,7 +106,7 @@ while(True):
 
             line = line.decode().strip()
 
-            print("Received:", line)  # Print the received line
+            print("Arduino:", line)  # Print the received line
 
             # get time stamp
             ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
