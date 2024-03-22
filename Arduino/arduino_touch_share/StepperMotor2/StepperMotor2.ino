@@ -194,8 +194,8 @@ String motorTransmit(int (&values) [NUM_VALUES]) {
 void pinMove(int pinNum, int valNew) {
   Serial.println("Here!");
   int valOld = pinRead(pinNum);
-  Serial.print("Current moving pin: ");
-  Serial.println(pinNum);
+  //Serial.print("Current moving pin: ");
+  //Serial.println(pinNum);
   for (int i=0; i<NUM_VALUES; i++) {
     pinEN(i, LOW);
   }
