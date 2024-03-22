@@ -23,8 +23,9 @@ void setup() {
   pinMode(SDA, INPUT);
 
   // Enable pins
-  pinMode(EN1, OUTPUT);
-  pinMode(VAL1, INPUT);
+  for (int i = 0; i<NUM_VALUES; i++) {
+    pinMode(i+2, OUTPUT);
+  }
 
   analogWrite(SCL, 127);
 
@@ -66,8 +67,8 @@ void loop() {
   delay(100);
   */
 
-  //String pinReading = motorTransmit(values);
-  String pinReading = valuesPrint(values);
+  String pinReading = motorTransmit(values);
+  //String pinReading = valuesPrint(values);
   Serial.println(pinReading);
   
   // Call the readValues function
@@ -77,7 +78,7 @@ void loop() {
     String valString = Serial.readString();
     valString += '\n';
     readValues(values, valString);
-    motorReceivePrint(values);
+    motorReceive(values);
     valchange = false;
   }
   
@@ -108,6 +109,28 @@ void motorSetup(void) {
   delay(delayShift);
 }
 
+void motorStep(int steps) {
+  digitalWrite(SCL, LOW);
+  for (int i =0; i<steps; i++) {
+    delay(delayShift);
+  digitalWrite(SCL, HIGH);
+  delay(delayShift);
+  digitalWrite(SCL, LOW);
+  delay(delayShift);
+  digitalWrite(SCL, HIGH);
+  delay(delayShift);
+  digitalWrite(SCL, LOW);
+  delay(delayShift);
+  digitalWrite(SCL, HIGH);
+  delay(delayShift);
+  digitalWrite(SCL, LOW);
+  delay(delayShift);
+  digitalWrite(SCL, HIGH);
+  delay(delayShift);
+  digitalWrite(SCL, LOW);
+  }
+}
+
 void readValues(int (&values)[NUM_VALUES], String valString) {
   int tempVals[4];
     
@@ -135,6 +158,7 @@ void motorReceivePrint(int (&values) [NUM_VALUES]) {
   str.remove(str.length() - 1);
 
   Serial.println(str);
+  pinEN(1, HIGH);
 }
 
 void motorReceive(int (&values) [NUM_VALUES]) {
@@ -168,20 +192,30 @@ String motorTransmit(int (&values) [NUM_VALUES]) {
 
 
 void pinMove(int pinNum, int valNew) {
-  //Serial.println("Here!");
+  Serial.println("Here!");
   int valOld = pinRead(pinNum);
+  Serial.print("Current moving pin: ");
+  Serial.println(pinNum);
+  for (int i=0; i<NUM_VALUES; i++) {
+    pinEN(i, LOW);
+  }
+
+  //pinEN(pinNum, HIGH);
   
   while(abs(valNew - valOld) > 30) {
-    //Serial.println("Loop!");
+    Serial.println("Loop!");
     if ((valNew - valOld) > 30) digitalWrite(DIR, HIGH);
     if ((valNew - valOld) < 30) digitalWrite(DIR, LOW);
     pinEN(pinNum, HIGH);
-    delay(100);
+    delay(500);
+    //motorStep(1000);
     pinEN(pinNum, LOW);
     delay(500);
-    valOld = analogRead(VAL1);
-    //Serial.print("Current moving value: ");
-    //Serial.println(valOld);
+    valOld = pinRead(pinNum);
+    Serial.print("Current moving pin: ");
+    Serial.println(pinNum);
+    Serial.print("Current moving value: ");
+    Serial.println(valOld);
   }
 }
 
@@ -189,12 +223,16 @@ void pinEN(uint8_t pinNum, uint8_t pinState) {
   switch(pinNum) {
     case 1:
       digitalWrite(EN1, pinState);
+      break;
     case 2:
       digitalWrite(EN2, pinState);
+      break;
     case 3:
       digitalWrite(EN3, pinState);
+      break;
     case 4:
       digitalWrite(EN4, pinState);
+      break;
   }
 }
 
